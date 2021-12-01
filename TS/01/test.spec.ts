@@ -5,26 +5,28 @@ describe('Puzzle 01', () => {
     beforeEach(() => {
         solution = new PuzzleSolution()
         solution.setInput([
-            2020,
-            50,
-            100,
-            300,
-            999,
-            1999,
+            199,
             200,
-            1720
+            208,
+            210,
+            200,
+            207,
+            240,
+            269,
+            260,
+            263
         ].map(v => `${v}`).join('\n'))
     })
     describe('part A', () => {
-        test('should return the first set multiplied if reached 2020', () => {
+        test('should return the number of increases', () => {
             const result = solution.run()
-            expect(result.a).toBe(1720 * 300)
+            expect(result.a).toBe(7)
         })
     })
     describe('part B', () => {
-        test('should return the first set of three multiplied if reached 2020', () => {
+        test('should return the number of increases when grouped by sets of three', () => {
             const result = solution.run()
-            expect(result.b).toBe(1720 * 200 * 100)
+            expect(result.b).toBe(5)
         })
     })
 })
