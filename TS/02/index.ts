@@ -14,7 +14,7 @@ export class PuzzleSolution extends BasePuzzle implements Puzzle {
         let depth = 0
         let horizontal = 0
 
-        this.getInputAsTable(' ').forEach(row => {
+        this.getInputAsTable({ splitByCol: ' '}).forEach(row => {
             switch(row[0]) {
                 case 'forward': horizontal += parseInt(row[1]); break
                 case 'up': depth -= parseInt(row[1]); break
@@ -30,7 +30,7 @@ export class PuzzleSolution extends BasePuzzle implements Puzzle {
         let horizontal = 0
         let aim = 0
 
-        this.getInputAsTable(' ').forEach(row => {
+        this.getInputAsTable({ splitByCol: ' '}).forEach(row => {
             switch(row[0]) {
                 case 'forward': {
                     horizontal += parseInt(row[1])
