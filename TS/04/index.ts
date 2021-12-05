@@ -6,7 +6,7 @@ class BingoCard {
 
     constructor(input: string) {
         this.numbers = input.split('\n').map(row => row.trim().split(/\s+/g).map(v => parseInt(v.trim(), 10)))
-        this.hits = this.numbers.map(r => r.map(_ => false))
+        this.hits = this.numbers.map(r => r.map(() => false))
     }
 
     public enterNumber(number: number): boolean {
