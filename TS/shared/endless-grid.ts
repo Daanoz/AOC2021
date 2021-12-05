@@ -207,7 +207,19 @@ export class EndlessGrid<T extends string | GridCell> {
         return undefined
     }
 
-    public toString(xStart?: number, yStart?: number, xEnd?: number, yEnd?: number, defaultValue = ' '): string {
+    public toString({
+        xStart, 
+        yStart, 
+        xEnd, 
+        yEnd, 
+        defaultValue = ' '
+    }: {
+        xStart?: number, 
+        yStart?: number, 
+        xEnd?: number, 
+        yEnd?: number, 
+        defaultValue?: string
+    }): string {
         let body = ''
         for(let y = yEnd || this.yRange[1]; y >= (yStart || this.yRange[0]); y--) {
             let row = ''
