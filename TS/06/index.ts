@@ -32,11 +32,14 @@ export class PuzzleSolution extends BasePuzzle implements Puzzle {
 
     private fishDay(fishMap: Map<number, number>): Map<number, number> {
         return Array.from(fishMap.keys()).reduce((map, value) => {
+            const currentCount = fishMap.get(value)!
             if (value === 0) {
-                map.set(6, (map.get(6) || 0) + fishMap.get(value)!)
-                map.set(8, fishMap.get(value)!)
+                const existingMapCount = (map.get(6) || 0)
+                map.set(6, existingMapCount + currentCount)
+                map.set(8, currentCount)
             } else {
-                map.set(value - 1, (map.get(value - 1) || 0) + fishMap.get(value)!)
+                const existingMapCount = (map.get(value - 1) || 0)
+                map.set(value - 1, existingMapCount + currentCount)
             }
             return map
         }, new Map<number, number>())
