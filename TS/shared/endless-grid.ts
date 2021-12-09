@@ -23,13 +23,23 @@ export class EndlessGrid<T extends string | GridCell> {
     }
 
     public get(x: number, y: number): T | undefined;
-    public get(x: number, y: number, defaultValue: T): T;
+    public get(x: number, y: number, defaultValue: T | undefined): T;
     public get(x: number, y: number, defaultValue: string): string;
     public get(x: number, y: number, defaultValue?: T | string): T | undefined | string {
         if (!this.grid.has(y)) {
             return defaultValue
         }
-        return this.grid.get(y)?.get(x) || defaultValue
+        const cell = this.grid.get(y)?.get(x)
+        return cell === undefined ? defaultValue : cell
+    }
+
+    public getNeighborsIndexes(x: number, y: number): [number, number][] {
+        return [ [x, y - 1], [x + 1, y], [x, y + 1], [x - 1, y] ]
+    }
+
+    public getNeighbors<U extends (T | undefined)>(x: number, y: number, defaultValue?: U): (T | U)[] {
+        return this.getNeighborsIndexes(x, y)
+            .map(pos => this.get(pos[0], pos[1], defaultValue))
     }
 
     public getHeight(): number { return Math.abs(this.yRange[1] - this.yRange[0]) }
