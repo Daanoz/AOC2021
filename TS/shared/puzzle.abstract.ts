@@ -20,18 +20,19 @@ export abstract class BasePuzzle {
     protected getInputAsRows(splitBy?: string | RegExp): string[] {
         return this.getInput().trim().split(splitBy === undefined ? /\r\n|\n|\r/ : splitBy)
     }
-    protected getInputAsTable<T = string>({
-        splitByCol,
-        splitByRow,
-        cellParser = (value: string) => value as unknown as T
-    }: { 
+    protected getInputAsTable<T = string>(parser?: { 
         splitByCol?: string | RegExp, 
         splitByRow?: string | RegExp,
         cellParser?: (value: string) => T
     }): T[][] {
+        const {
+            splitByCol,
+            splitByRow,
+            cellParser = (value: string) => value as unknown as T
+        } = parser || {}
         return this.getInputAsRows(splitByRow).map(row => row.split(splitByCol === undefined ? ',': splitByCol).map(cellParser))
     }
-    protected getInputAsGrid<T = string>(parser: { 
+    protected getInputAsGrid<T = string>(parser?: { 
         splitByCol?: string | RegExp, 
         splitByRow?: string | RegExp,
         cellParser?: (value: string) => T

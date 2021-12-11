@@ -8,8 +8,9 @@ describe('Puzzle 07', () => {
     })
     describe('part A & B', () => {
         test('get to the least fuel', () => {
-            expect(solution.run().a).toBe(37)
-            expect(solution.run().b).toBe(168)
+            const result = solution.run()
+            expect(result.a).toBe(37)
+            expect(result.b).toBe(168)
         })
     })
 })

@@ -22,6 +22,13 @@ export class EndlessGrid<T extends string | GridCell> {
         this.yRange = updateRange(this.yRange, y)
     }
 
+    public update(x: number, y: number, updateFn: (value: T) => T, defaultValue?: T): void {
+        if (!defaultValue && !this.has(x, y)) {
+            throw new Error('Unable to update undefined value')
+        }
+        this.set(x, y, updateFn(this.get(x, y, defaultValue)!))
+    }
+
     public get(x: number, y: number): T | undefined;
     public get(x: number, y: number, defaultValue: T | undefined): T;
     public get(x: number, y: number, defaultValue: string): string;
@@ -33,17 +40,28 @@ export class EndlessGrid<T extends string | GridCell> {
         return cell === undefined ? defaultValue : cell
     }
 
-    public getNeighborsIndexes(x: number, y: number): [number, number][] {
-        return [ [x, y - 1], [x + 1, y], [x, y + 1], [x - 1, y] ]
+    public getNeighborsIndexes(x: number, y: number, opts?: { includeDiagonals?: boolean, onlyDefined?: boolean }): [number, number][] {
+        let coordinates: [number, number][] = [ [x, y - 1], [x + 1, y], [x, y + 1], [x - 1, y] ]
+        if (opts?.includeDiagonals) {
+            coordinates = [ 
+                [x, y - 1], [x + 1, y - 1], [x + 1, y], [x + 1, y + 1], 
+                [x, y + 1], [x - 1, y + 1], [x - 1, y], [x - 1, y - 1] 
+            ]
+        }
+        if (!opts?.onlyDefined) {
+            return coordinates
+        } else {
+            return coordinates.filter(coord => this.has(coord[0], coord[1]))
+        }
     }
 
-    public getNeighbors<U extends (T | undefined)>(x: number, y: number, defaultValue?: U): (T | U)[] {
-        return this.getNeighborsIndexes(x, y)
+    public getNeighbors<U extends (T | undefined)>(x: number, y: number, defaultValue?: U, opts?: { includeDiagonals?: boolean, onlyDefined?: boolean }): (T | U)[] {
+        return this.getNeighborsIndexes(x, y, opts)
             .map(pos => this.get(pos[0], pos[1], defaultValue))
     }
 
-    public getHeight(): number { return Math.abs(this.yRange[1] - this.yRange[0]) }
-    public getWidth():  number { return Math.abs(this.xRange[1] - this.xRange[0]) }
+    public getHeight(): number { return Math.abs(this.yRange[1] - this.yRange[0]) + 1 }
+    public getWidth():  number { return Math.abs(this.xRange[1] - this.xRange[0]) + 1 }
     public getXRange(): [number, number] { return [...this.xRange] }
     public getYRange(): [number, number] { return [...this.yRange] }
 
@@ -217,19 +235,20 @@ export class EndlessGrid<T extends string | GridCell> {
         return undefined
     }
 
-    public toString({
-        xStart, 
-        yStart, 
-        xEnd, 
-        yEnd, 
-        defaultValue = ' '
-    }: {
+    public toString(opts?: {
         xStart?: number, 
         yStart?: number, 
         xEnd?: number, 
         yEnd?: number, 
         defaultValue?: string
     }): string {
+        const {
+            xStart, 
+            yStart, 
+            xEnd, 
+            yEnd, 
+            defaultValue = ' '
+        } = opts || {}
         let body = ''
         for(let y = yEnd || this.yRange[1]; y >= (yStart || this.yRange[0]); y--) {
             let row = ''

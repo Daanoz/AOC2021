@@ -17,8 +17,9 @@ describe('Puzzle 10', () => {
     })
     describe('part A & B', () => {
         test('should be able to parse the lines', () => {
-            expect(solution.run().a).toBe(26397)
-            expect(solution.run().b).toBe(288957)
+            const result = solution.run()
+            expect(result.a).toBe(26397)
+            expect(result.b).toBe(288957)
         })
     })
 })

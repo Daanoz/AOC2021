@@ -12,8 +12,9 @@ describe('Puzzle 09', () => {
     })
     describe('part A & B', () => {
         test('should find the areas', () => {
-            expect(solution.run().a).toBe(15)
-            expect(solution.run().b).toBe(1134)
+            const result = solution.run()
+            expect(result.a).toBe(15)
+            expect(result.b).toBe(1134)
         })
     })
 })

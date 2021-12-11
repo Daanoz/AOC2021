@@ -17,8 +17,9 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
     })
     describe('part A & B', () => {
         test('should be able to decode the segments', () => {
-            expect(solution.run().a).toBe(26)
-            expect(solution.run().b).toBe(61229)
+            const result = solution.run()
+            expect(result.a).toBe(26)
+            expect(result.b).toBe(61229)
         })
     })
 })

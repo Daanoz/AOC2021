@@ -8,8 +8,9 @@ describe('Puzzle 06', () => {
     })
     describe('part A', () => {
         test('the fish growth to be simulated', () => {
-            expect(solution.run().a).toBe(5934)
-            expect(solution.run().b).toBe(26984457539)
+            const result = solution.run()
+            expect(result.a).toBe(5934)
+            expect(result.b).toBe(26984457539)
         })
     })
 })

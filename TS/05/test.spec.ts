@@ -17,8 +17,9 @@ describe('Puzzle 05', () => {
     })
     describe('part A and B', () => {
         test('the points with at least 2 overlap', () => {
-            expect(solution.run().a).toBe(5)
-            expect(solution.run().b).toBe(12)
+            const result = solution.run()
+            expect(result.a).toBe(5)
+            expect(result.b).toBe(12)
         })
     })
 })
