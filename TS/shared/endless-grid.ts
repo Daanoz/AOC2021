@@ -15,7 +15,13 @@ export class EndlessGrid<T extends string | GridCell> {
 
     constructor() {}
 
-    public set(x: number, y: number, value: T): void {
+    public set(x: number, y: number, value: T | undefined): void {
+        if (value === undefined) {
+            if (this.grid.has(y) && this.grid.get(y)?.has(x)) {
+                this.grid.get(y)?.delete(x)
+            }
+            return
+        }
         if (!this.grid.has(y)) { this.grid.set(y, new Map()) }
         this.grid.get(y)?.set(x, value)
         this.xRange = updateRange(this.xRange, x)
@@ -235,25 +241,36 @@ export class EndlessGrid<T extends string | GridCell> {
         return undefined
     }
 
+    public slice(x1: number, y1: number, x2: number, y2: number): EndlessGrid<T> {
+        const slice = new EndlessGrid<T>()
+        for (let x = Math.min(x1, x2); x < Math.max(x1, x2); x++) {
+            for (let y = Math.min(y1, y2); y < Math.max(y1, y2); y++) {
+                slice.set(x, y, this.get(x, y))
+            }
+        }
+        return slice
+    }
+
     public toString(opts?: {
-        xStart?: number, 
-        yStart?: number, 
-        xEnd?: number, 
-        yEnd?: number, 
-        defaultValue?: string
+        defaultValue?: string,
+        upsideDown?: boolean,
+        reversed?: boolean
     }): string {
         const {
-            xStart, 
-            yStart, 
-            xEnd, 
-            yEnd, 
-            defaultValue = ' '
+            defaultValue = ' ',
+            upsideDown = false,
+            reversed = false
         } = opts || {}
         let body = ''
-        for(let y = yEnd || this.yRange[1]; y >= (yStart || this.yRange[0]); y--) {
+
+        for(let y = this.yRange[1]; y >= (this.yRange[0]); y--) {
             let row = ''
-            for(let x = xStart || this.xRange[0]; x <= (xEnd || this.xRange[1]); x++) {
-                const cell = this.get(x, y, defaultValue)
+            for(let x = this.xRange[0]; x <= (this.xRange[1]); x++) {
+                const cell = this.get(
+                    reversed ? this.xRange[1] - x : x, 
+                    upsideDown ? this.yRange[1] - y : y, 
+                    defaultValue
+                )
                 if (typeof cell === 'string') {
                     row += cell
                 } else {
