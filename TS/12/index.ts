@@ -1,5 +1,7 @@
 import { Puzzle, Runner, BasePuzzle, Result } from '../shared/'
 
+const START = 'start'
+const END = 'end'
 class Node {
     private _targets: Node[] = []
 
@@ -16,19 +18,17 @@ class Node {
     } 
 
     public addTarget(node: Node) {
-        this._targets.push(node)
+        if (node.name !== START && this.name !== END) {
+            this._targets.push(node)
+        }
     }
 }
-
-const START = 'start'
-const END = 'end'
-
 export class PuzzleSolution extends BasePuzzle implements Puzzle {
     private nodes = new Map<string, Node>()
 
     public run(): Result {
         const result: Result = {}
-
+        this.nodes = new Map<string, Node>()
         this.getInputAsRows()
             .forEach(path => {
                 const [start, end] = path.split('-')
@@ -38,8 +38,8 @@ export class PuzzleSolution extends BasePuzzle implements Puzzle {
                 this.nodes.get(end)!.addTarget(this.nodes.get(start)!)
             })
 
-        result.a = this.findPaths(this.nodes.get(START)!, []).length
-        result.b = this.findPathsPartB(this.nodes.get(START)!, []).length
+        result.a = this.timed('partA', () => this.findPaths(this.nodes.get(START)!, []).length)
+        result.b = this.timed('partB', () => this.findPathsPartB(this.nodes.get(START)!, []).length)
 
         return result
     }
@@ -76,23 +76,12 @@ export class PuzzleSolution extends BasePuzzle implements Puzzle {
             } else if (
                 !node.isBig && 
                 !hasDoubleVisitedSmall && 
-                path.indexOf(node) >= 0 &&
-                node.name !== START
+                path.indexOf(node) >= 0
             ) {
                 returnPaths = returnPaths.concat(this.findPathsPartB(node, currentPath, true))
             }
         })
 
-        const uniquePaths: string[] = []
-        returnPaths = returnPaths
-            .filter(path => {
-                const pathHash = path.map(p => p.name).join(',')
-                if (uniquePaths.indexOf(pathHash) < 0) {
-                    uniquePaths.push(pathHash)
-                    return true
-                }
-                return false
-            })
         returnPaths.forEach(returnPath => returnPath.unshift(current))
         return returnPaths
     }

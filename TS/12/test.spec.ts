@@ -47,18 +47,21 @@ describe('Puzzle 12', () => {
     describe('part A & B', () => {
         test('should find all paths in example 1', () => {
             solution.setInput(example1)
-            expect(solution.run().a).toBe(10)
-            expect(solution.run().b).toBe(36)
+            const result = solution.run()
+            expect(result.a).toBe(10)
+            expect(result.b).toBe(36)
         })
         test('should find all paths in example 2', () => {
             solution.setInput(example2)
-            expect(solution.run().a).toBe(19)
-            expect(solution.run().b).toBe(103)
+            const result = solution.run()
+            expect(result.a).toBe(19)
+            expect(result.b).toBe(103)
         })
         test('should find all paths in example 3', () => {
             solution.setInput(example3)
-            expect(solution.run().a).toBe(226)
-            expect(solution.run().b).toBe(3509)
+            const result = solution.run()
+            expect(result.a).toBe(226)
+            expect(result.b).toBe(3509)
         })
     })
     describe('part B', () => {
