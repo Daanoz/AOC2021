@@ -32,13 +32,15 @@ export abstract class BasePuzzle {
         } = parser || {}
         return this.getInputAsRows(splitByRow).map(row => row.split(splitByCol === undefined ? ',': splitByCol).map(cellParser))
     }
-    protected getInputAsGrid<T = string>(parser?: { 
+    protected getInputAsGrid<T = string>(options?: { 
         splitByCol?: string | RegExp, 
         splitByRow?: string | RegExp,
-        cellParser?: (value: string) => T
+        cellParser?: (value: string) => T,
+        reversed?: boolean
     }): EndlessGrid<T> {
+        const { reversed = true, ...parser } = options || {}
         const grid = new EndlessGrid<T>()
-        this.getInputAsTable(parser).forEach((row, y) => row.forEach((cell, x) => grid.set(x, y * -1, cell)))
+        this.getInputAsTable(parser).forEach((row, y) => row.forEach((cell, x) => grid.set(x, y * (reversed ? -1 : 1), cell)))
         return grid
     }
 
