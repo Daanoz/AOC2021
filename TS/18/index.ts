@@ -76,14 +76,8 @@ class Pair extends PairElement {
             this.right = value
         }
     }
-
-    public leftIsNumber() {
-        return typeof this.left === 'number'
-    }
-    public rightIsNumber() {
-        return typeof this.right === 'number'
-    }
-    public addLeft(value: PairElement, previous: PairElement): boolean {
+    
+    public moveLeft(value: PairElement, previous: PairElement): boolean {
         if (this.left === previous) {
             return false
         }
@@ -93,7 +87,8 @@ class Pair extends PairElement {
     public addToLeft(value: PairElement) {
         this.left.addToLeft(value)
     }
-    public addRight(value: PairElement, previous: PairElement): boolean {
+
+    public moveRight(value: PairElement, previous: PairElement): boolean {
         if (this.right === previous) {
             return false
         }
@@ -107,8 +102,8 @@ class Pair extends PairElement {
     public explode(depth = 0, parents: Pair[] = []): boolean {
         if (depth >= 4) {
             const parentWithCurrent = [this, ...parents]
-            parents.find((p, index) => p.addLeft(this.left, parentWithCurrent[index]))
-            parents.find((p, index) => p.addRight(this.right, parentWithCurrent[index]))
+            parents.find((p, index) => p.moveLeft(this.left, parentWithCurrent[index]))
+            parents.find((p, index) => p.moveRight(this.right, parentWithCurrent[index]))
             parents[0].replace(
                 this,
                 new Digit(
