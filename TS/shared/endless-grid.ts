@@ -264,19 +264,18 @@ export class EndlessGrid<T extends string | GridCell> {
             cellToString
         } = opts || {}
         let body = ''
-
         for(let y = this.yRange[1]; y >= (this.yRange[0]); y--) {
             let row = ''
             for(let x = this.xRange[0]; x <= (this.xRange[1]); x++) {
                 if (cellToString) {
                     row += cellToString(this.get(
-                        reversed ? this.xRange[1] - x : x, 
-                        upsideDown ? this.yRange[1] - y : y, 
+                        reversed ? this.xRange[0] - (this.xRange[0] - x) : x, 
+                        upsideDown ? this.yRange[1] - (this.yRange[1] - y) : y, 
                     ))
                 } else {
                     const cell = this.get(
-                        reversed ? this.xRange[1] - x : x, 
-                        upsideDown ? this.yRange[1] - y : y, 
+                        reversed ? this.xRange[0] - (this.xRange[0] - x) : x, 
+                        upsideDown ? this.yRange[1] - (this.yRange[1] - y) : y, 
                         defaultValue
                     )
                     if (typeof cell === 'string') {
